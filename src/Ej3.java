@@ -11,6 +11,7 @@ public class Ej3 {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         JFileChooser fc;
+        JFileChooser creator;
 
         int botonPulsado = 0;
         int opc = 4;
@@ -20,8 +21,10 @@ public class Ej3 {
             switch (opc) {
                 case 0: //Crear Directorio ¿o Arquivo?
                     fc = new JFileChooser();
-
+                    fc.showOpenDialog(null);
+                    out.println(crearDirectorio(fc.getSelectedFile())? "Carpeta Creada" : "ERROR");
                     break;
+
                 case 1: //Listar Arquivos y Subdirectorios con *Recursividade*
                     fc = new JFileChooser();
                     fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -29,10 +32,15 @@ public class Ej3 {
 
                     if (botonPulsado == JFileChooser.APPROVE_OPTION) {
                         File[] fList = fc.getSelectedFile().listFiles();
-                        Stack<File> pila.addAll(flist);
-                        out.println(listarArchivos(new StringBuilder(),fc.getSelectedFile()));
+                        Stack<File> stack = new Stack<>();
+                        assert fList != null;
+                        for (File f : fList)
+                            stack.push(f);
+
+                        out.println(listarArchivosRecursivo(new StringBuilder(),stack));
                     }
                     break;
+
                 case 2: //Eliminar Arquivo o Directorio
                     fc = new JFileChooser();
                     botonPulsado = fc.showOpenDialog(null);
@@ -41,12 +49,35 @@ public class Ej3 {
                         out.println(eliminar(fc.getSelectedFile()) ? "Eliminación Completada" : "ERROR");
                     }
                     break;
+
                 case 3: //Mover o Renombrar Arquivo o Directorio
+                    fc = new JFileChooser();
+                    botonPulsado = fc.showOpenDialog(null);
+                    if (botonPulsado == JFileChooser.APPROVE_OPTION) {
+                        File archivoOriginal = fc.getSelectedFile();
+                        out.println("Selecciona el nuevo nombre y ubicación del archivo o directorio:");
+
+                        creator = new JFileChooser();
+                        creator.setSelectedFile(new File(archivoOriginal.getParent(), "nuevoNombre")); // Sugerir nuevo nombre en el mismo directorio
+                        botonPulsado = creator.showSaveDialog(null);
+
+                        if (botonPulsado == JFileChooser.APPROVE_OPTION) {
+                            File archivoRenombrado = creator.getSelectedFile();
+
+                            if (archivoOriginal.renameTo(archivoRenombrado)) {
+                                out.println("Renombrado exitoso a: " + archivoRenombrado.getName());
+                            } else {
+                                out.println("ERROR al renombrar el archivo o directorio");
+                            }
+                        }
+                    }
 
                     break;
+
                 case 4: //Salir bucle
                     salir = true;
                     break;
+
                 default: //Default
                     err.println("Numero equivocado");
                     break;
@@ -56,6 +87,14 @@ public class Ej3 {
 
     public static  boolean crearDirectorio(File f) {
         return f.mkdir();
+    }
+
+    public static  boolean crearArchivo(File f) {
+        try {
+            return f.createNewFile();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String listarArchivos(StringBuilder sb, File f){
@@ -71,6 +110,7 @@ public class Ej3 {
 
     public static String listarArchivosRecursivo(StringBuilder sb, Stack<File> pila){
         if (!pila.isEmpty()){
+            out.println(pila.peek());
             File f = pila.pop();
             sb.append("\nFile: ").append(f.getName())
                     .append("\nTamaño: ").append(f.length())
