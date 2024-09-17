@@ -10,52 +10,54 @@ import static java.lang.System.out;
 public class Ej3 {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
-        JFileChooser fc;
+        JFileChooser fc = new JFileChooser();
         JFileChooser creator;
 
         int botonPulsado = 0;
         int opc = 4;
         boolean salir = false;
         while(!salir) {
-            opc = sc.nextInt();
+            opc = Integer.parseInt(sc.nextLine());
+
             switch (opc) {
                 case 0: //Crear Directorio ¿o Arquivo?
-                    fc = new JFileChooser();
-                    fc.showOpenDialog(null);
+                    //fc = new JFileChooser();
+                    fc.showSaveDialog(null);
                     out.println(crearDirectorio(fc.getSelectedFile())? "Carpeta Creada" : "ERROR");
                     break;
 
                 case 1: //Listar Arquivos y Subdirectorios con *Recursividade*
-                    fc = new JFileChooser();
+                    //fc = new JFileChooser();
                     fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                     botonPulsado = fc.showOpenDialog(null);
 
                     if (botonPulsado == JFileChooser.APPROVE_OPTION) {
                         File[] fList = fc.getSelectedFile().listFiles();
                         Stack<File> stack = new Stack<>();
-                        assert fList != null;
-                        for (File f : fList)
-                            stack.push(f);
+                        if (fList != null) {
+                            for (File f : fList)
+                                stack.push(f);
+                        }
 
                         System.out.println(listarArchivosRecursivo(new StringBuilder(),stack));
                     }
                     break;
 
                 case 2: //Eliminar Arquivo o Directorio
-                    fc = new JFileChooser();
-                    botonPulsado = fc.showOpenDialog(null);
+                    //fc = new JFileChooser();
                     boolean arquivo = sc.nextBoolean();
                     fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                    if (arquivo == false){
+                    if (!arquivo){
                         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                     }
+                    botonPulsado = fc.showOpenDialog(null);
                     if (botonPulsado == JFileChooser.APPROVE_OPTION) {
                         out.println(eliminar(fc.getSelectedFile()) ? "Eliminación Completada" : "ERROR");
                     }
                     break;
 
                 case 3: //Mover o Renombrar Arquivo o Directorio
-                    fc = new JFileChooser();
+                    //fc = new JFileChooser();
                     botonPulsado = fc.showOpenDialog(null);
                     if (botonPulsado == JFileChooser.APPROVE_OPTION) {
                         File archivoOriginal = fc.getSelectedFile();
@@ -103,11 +105,13 @@ public class Ej3 {
 
     public static String listarArchivos(StringBuilder sb, File f){
         File[] fList = f.listFiles();
-        for(File fl : fList){
-            sb.append("\nFile: ").append(fl.getName())
-                    .append("\nTamaño: ").append(fl.length())
-                    .append(fl.isDirectory() ? "\nDirectorio" : "\nFichero")
-                    .append("\n----------------------------------\n");
+        if (fList != null) {
+            for(File fl : fList){
+                sb.append("\nFile: ").append(fl.getName())
+                        .append("\nTamaño: ").append(fl.length())
+                        .append(fl.isDirectory() ? "\nDirectorio" : "\nFichero")
+                        .append("\n----------------------------------\n");
+            }
         }
         return sb.toString();
     }
