@@ -37,14 +37,18 @@ public class Ej3 {
                         for (File f : fList)
                             stack.push(f);
 
-                        out.println(listarArchivosRecursivo(new StringBuilder(),stack));
+                        System.out.println(listarArchivosRecursivo(new StringBuilder(),stack));
                     }
                     break;
 
                 case 2: //Eliminar Arquivo o Directorio
                     fc = new JFileChooser();
                     botonPulsado = fc.showOpenDialog(null);
-
+                    boolean arquivo = sc.nextBoolean();
+                    fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                    if (arquivo == false){
+                        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                    }
                     if (botonPulsado == JFileChooser.APPROVE_OPTION) {
                         out.println(eliminar(fc.getSelectedFile()) ? "Eliminación Completada" : "ERROR");
                     }
@@ -116,9 +120,16 @@ public class Ej3 {
                     .append("\nTamaño: ").append(f.length())
                     .append(f.isDirectory() ? "\nDirectorio" : "\nFichero")
                     .append("\n----------------------------------\n");
+
+            if (f.isDirectory()){
+                File[] fList = f.listFiles();
+                assert fList != null;
+                for (File sf : fList)
+                    pila.push(sf);
+            }
             return listarArchivosRecursivo(sb,pila);
         }
-        return "";
+        return sb.toString();
     }
 
     public static boolean eliminar(File f){
