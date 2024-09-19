@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.io.File;
 import java.util.Date;
 
-public class Ej1 {
+public class Ej01_01_01 {
     public static void main(String[] args) {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);

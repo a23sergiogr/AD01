@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.io.File;
 
-public class Ej2 {
+public class Ej01_01_02 {
     public static void main(String[] args) {
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

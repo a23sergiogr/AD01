@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class Ej5 {
+public class Ej01_02_02 {
     public static void main(String[] args) {
         try {
             RandomAccessFile raf = new RandomAccessFile("prueba.txt", "rw");
@@ -23,7 +23,7 @@ public class Ej5 {
         StringBuilder sc = new StringBuilder();
         raf.seek(0);
         byte[] b = new byte[(int)raf.length()];
-        //System.out.println(raf.read(b));
+        System.out.println(raf.read(b));
         for(byte by : b){
             sc.append((char)by);
         }

@@ -7,7 +7,7 @@ import java.util.Stack;
 import static java.lang.System.err;
 import static java.lang.System.out;
 
-public class Ej3 {
+public class Ej01_01_03 {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         JFileChooser fc = new JFileChooser();

@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-public class Ej4 {
+public class Ej01_02_01 {
     public static void main(String[] args) {
         try {
             RandomAccessFile raf = new RandomAccessFile("prueba.txt", "rw");
