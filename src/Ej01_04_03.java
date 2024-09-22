@@ -14,7 +14,8 @@ public class Ej01_04_03 {
         esccribirDatos(cP);
 
         int opc = 0;
-        while (opc != 6) {
+        boolean salir = false;
+        while (!salir) {
             opc = menu.opcionSelector();
 
             switch (opc) {
@@ -42,8 +43,14 @@ public class Ej01_04_03 {
                 case 4:     //Guardar
                     esccribirDatos(cP);
                     break;
+                case 5:     //Salir
+                    salir = true;
+                    break;
+                case -1:    //X
+                    salir = true;
+                    break;
                 default:
-                    opc = 6;
+                    Menu.exceptionMessage(new Exception("Boton inactivo"));
                     break;
             }
         }
