@@ -12,22 +12,23 @@ public class ColeccionPersonas implements Serializable {
         this.sP = sP;
     }
 
-    public ColeccionPersonas(){
+    public ColeccionPersonas() {
         sP = new ArrayList<Persona>();
     }
-    public int numPersonas(){
+
+    public int numPersonas() {
         return sP.size();
     }
 
-    public void addPersona(Persona p){
+    public void addPersona(Persona p) {
         sP.add(p);
     }
 
-    public Persona getPersona(int i){
+    public Persona getPersona(int i) {
         return sP.get(i);
     }
 
-    public void delPersona(int i){
+    public void delPersona(int i) {
         sP.remove(i);
     }
 
@@ -35,8 +36,10 @@ public class ColeccionPersonas implements Serializable {
     public String toString() {
         StringBuilder sb = new StringBuilder("Colección de Personas:\n");
 
-        for (Persona p : sP){
-            sb.append("\n").append(p.toString());
+        int i = 0;
+        for (Persona p : sP) {
+            sb.append("\nn:").append(i).append(".- ").append(p.toString());
+            i++;
         }
 
         return sb.toString();

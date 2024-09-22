@@ -6,110 +6,154 @@ import java.io.*;
 
 public class Ej01_04_03 {
     public static final String ARQUIVO = "src/resources/coleccionPersonas.txt";
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         Menu menu = new Menu();
         ColeccionPersonas cP = new ColeccionPersonas();
-        try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO));){
-            cargarDatos(cP, ois);
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))){
+        cargarDatos(cP);
+        esccribirDatos(cP);
 
-                oos.writeObject(cP);
+        int opc = 0;
+        while (opc != 6) {
+            opc = menu.opcionSelector();
 
-                int opc = 0;
-                while(opc != 6){
-                    opc = menu.opcionSelector();
-
-                    switch (opc) {
-                        case 0:
-                            Persona p1 = new Persona("A",1);
-                            Persona p2 = new Persona("B",2);
-                            Persona p3 = new Persona("C",3);
-                            Persona p4 = new Persona("D",4);
-                            cP.addPersona(p1);
-                            cP.addPersona(p2);
-                            cP.addPersona(p3);
-                            cP.addPersona(p4);
-                            break;
-                        case 1:
-                            cP.addPersona(menu.introducirPersona());
-                            break;
-                        case 2:
-                            menu.quitarPersona(cP);
-                            break;
-                        case 3:
-                            oos.writeObject(cP);
-                            break;
-                        case 4:
-                            menu.mostrarColección(cP);
-                            break;
-                        case 5:
-                            leerDatos(ois);
-                            break;
-                        default:
-                            opc = 6;
-                            break;
-                    }
-                }
+            switch (opc) {
+                case 0:     //Introducir varias personas
+                    Persona p1 = new Persona("A", 1);
+                    Persona p2 = new Persona("B", 2);
+                    Persona p3 = new Persona("C", 3);
+                    Persona p4 = new Persona("D", 4);
+                    cP.addPersona(p1);
+                    cP.addPersona(p2);
+                    cP.addPersona(p3);
+                    cP.addPersona(p4);
+                    break;
+                case 1:     //Introducir una Persona
+                    Persona p = menu.introducirPersona();
+                    if (p != null)
+                        cP.addPersona(p);
+                    break;
+                case 2:     //Quitar una Persona
+                    menu.quitarPersona(cP);
+                    break;
+                case 3:     //Mostrar Colección
+                    menu.mostrarColeccion(cP);
+                    break;
+                case 4:     //Guardar
+                    esccribirDatos(cP);
+                    break;
+                default:
+                    opc = 6;
+                    break;
             }
-        }
-        catch (IOException e){
-
         }
     }
 
-    public static void cargarDatos(ColeccionPersonas cP, ObjectInputStream ois){
-            while(true) {
-                ColeccionPersonas p;
-                try {
-                    p = (ColeccionPersonas) ois.readObject();
-                } catch (IOException e) {
-                    break;
-                } catch (ClassNotFoundException e) {
-                    break;
-                }
-                for(int i = 0; i < p.numPersonas(); i++){
+    public static void cargarDatos(ColeccionPersonas cP) {
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO))) {
+            ColeccionPersonas p = null;
+            try {
+                p = (ColeccionPersonas) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                Menu.exceptionMessage(e);
+            }
+            if (p != null) {
+                for (int i = 0; i < p.numPersonas(); i++) {
                     cP.addPersona(p.getPersona(i));
                 }
             }
+        } catch (IOException e) {
+            Menu.exceptionMessage(e);
+        }
     }
 
-    public static void leerDatos(ObjectInputStream ois){
-            while(true){
-                try{
-                    System.out.println(ois.readObject());
-                } catch (IOException e) {
-                    break;
-                } catch (ClassNotFoundException e) {
-                    break;
-                }
-            }
+    public static void esccribirDatos(ColeccionPersonas cP) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))) {
+            oos.writeObject(cP);
+        } catch (IOException e) {
+            Menu.exceptionMessage(e);
+        }
     }
 }
 
-class Menu{
-    public Menu(){}
 
-    public int opcionSelector(){
-        Object[] opcionesBoton = {"Introducir varias personas", "Introducir una Persona", "Quitar una Persona", "Guardar", "Mostrar Colección", "Leer Archivo", "Salir"};
-
-        int resultado = JOptionPane.showOptionDialog(null, "Returns the position of your choice on the array",
-                "Click a button", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, opcionesBoton, opcionesBoton[0]); // valor por defecto
-        return resultado;
+class Menu {
+    public Menu() {
     }
 
-    public Persona introducirPersona(){
-        String nome = JOptionPane.showInputDialog("Nome");
-        String edad = JOptionPane.showInputDialog("Edad");
-        return new Persona(nome,Integer.parseInt(edad));
+    public int opcionSelector() {
+        Object[] opcionesBoton = {"Introducir varias personas",
+                "Introducir una Persona",
+                "Quitar una Persona",
+                "Mostrar Colección",
+                "Guardar",
+                "Salir"};
+
+        return JOptionPane
+                .showOptionDialog(null,
+                        "Que quieres hacer?",
+                        "Click a button",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        opcionesBoton,
+                        opcionesBoton[0]);
     }
 
-    public void quitarPersona(ColeccionPersonas cP){
-        String i = JOptionPane.showInputDialog("Edad");
-        cP.delPersona(Integer.parseInt(i));
+    public Persona introducirPersona() {
+        String nome = null;
+        while(nome == null){
+            nome = JOptionPane.showInputDialog("Nome");
+        }
+        int edad = -1;
+        while(edad < 0){
+            try {
+                edad = Integer.parseInt(JOptionPane.showInputDialog("Edad"));
+            } catch (NumberFormatException e) {
+                exceptionMessage(e, "Debes introducir un numero en edad");
+            }
+        }
+        return new Persona(nome, edad);
     }
 
-    public void mostrarColección(ColeccionPersonas cP){
+    public void quitarPersona(ColeccionPersonas cP) {
+        try {
+            int i = Integer.parseInt(JOptionPane.showInputDialog("Número de Persona que quitar"));
+            if (i > -1 && i < cP.numPersonas())
+                cP.delPersona(i);
+            else
+                JOptionPane
+                        .showMessageDialog(null,
+                                "No exista una persona asociada a ese número",
+                                "titulo",
+                                JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception e) {
+            exceptionMessage(e);
+        }
+    }
+
+    public void mostrarColeccion(ColeccionPersonas cP) {
         Object mensage = cP.toString();
-        JOptionPane.showMessageDialog(null, (Object) mensage, "titulo", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane
+                .showMessageDialog(null,
+                        mensage,
+                        "titulo",
+                        JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public static void exceptionMessage(Exception e) {
+        JOptionPane
+                .showMessageDialog(null,
+                        "ERROR: " + e,
+                        "titulo",
+                        JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void exceptionMessage(Exception e, String opcMessage) {
+        JOptionPane
+                .showMessageDialog(null,
+                        opcMessage + "\nERROR: " + e,
+                        "titulo",
+                        JOptionPane.INFORMATION_MESSAGE);
     }
 }
