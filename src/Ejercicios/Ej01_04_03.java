@@ -1,3 +1,5 @@
+package Ejercicios;
+
 import resources.ColeccionPersonas;
 import resources.Persona;
 
@@ -9,9 +11,9 @@ public class Ej01_04_03 {
 
     public static void main(String[] args) {
         Menu menu = new Menu();
-        ColeccionPersonas cP = new ColeccionPersonas();
-        cargarDatos(cP);
-        esccribirDatos(cP);
+        ColeccionPersonas coleccionPersonas = new ColeccionPersonas();
+        cargarDatos(coleccionPersonas);
+        esccribirDatos(coleccionPersonas);
 
         int opc = 0;
         boolean salir = false;
@@ -24,24 +26,24 @@ public class Ej01_04_03 {
                     Persona p2 = new Persona("B", 2);
                     Persona p3 = new Persona("C", 3);
                     Persona p4 = new Persona("D", 4);
-                    cP.addPersona(p1);
-                    cP.addPersona(p2);
-                    cP.addPersona(p3);
-                    cP.addPersona(p4);
+                    coleccionPersonas.addPersona(p1);
+                    coleccionPersonas.addPersona(p2);
+                    coleccionPersonas.addPersona(p3);
+                    coleccionPersonas.addPersona(p4);
                     break;
                 case 1:     //Introducir una Persona
                     Persona p = menu.introducirPersona();
                     if (p != null)
-                        cP.addPersona(p);
+                        coleccionPersonas.addPersona(p);
                     break;
                 case 2:     //Quitar una Persona
-                    menu.quitarPersona(cP);
+                    menu.quitarPersona(coleccionPersonas);
                     break;
                 case 3:     //Mostrar Colección
-                    menu.mostrarColeccion(cP);
+                    menu.mostrarColeccion(coleccionPersonas);
                     break;
                 case 4:     //Guardar
-                    esccribirDatos(cP);
+                    esccribirDatos(coleccionPersonas);
                     break;
                 case 5:     //Salir
                     salir = true;
@@ -99,7 +101,7 @@ class Menu {
         return JOptionPane
                 .showOptionDialog(null,
                         "Que quieres hacer?",
-                        "Click a button",
+                        "Opciones",
                         JOptionPane.DEFAULT_OPTION,
                         JOptionPane.INFORMATION_MESSAGE,
                         null,
@@ -118,6 +120,7 @@ class Menu {
                 edad = Integer.parseInt(JOptionPane.showInputDialog("Edad"));
             } catch (NumberFormatException e) {
                 exceptionMessage(e, "Debes introducir un numero en edad");
+                edad = -1;
             }
         }
         return new Persona(nome, edad);
@@ -132,7 +135,7 @@ class Menu {
                 JOptionPane
                         .showMessageDialog(null,
                                 "No exista una persona asociada a ese número",
-                                "titulo",
+                                "Quitar Persona",
                                 JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             exceptionMessage(e);
@@ -144,7 +147,7 @@ class Menu {
         JOptionPane
                 .showMessageDialog(null,
                         mensage,
-                        "titulo",
+                        "Colección",
                         JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -152,7 +155,7 @@ class Menu {
         JOptionPane
                 .showMessageDialog(null,
                         "ERROR: " + e,
-                        "titulo",
+                        "Excepción",
                         JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -160,7 +163,7 @@ class Menu {
         JOptionPane
                 .showMessageDialog(null,
                         opcMessage + "\nERROR: " + e,
-                        "titulo",
+                        "Excepción",
                         JOptionPane.INFORMATION_MESSAGE);
     }
 }
