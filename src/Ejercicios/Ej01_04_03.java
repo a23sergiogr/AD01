@@ -79,6 +79,7 @@ public class Ej01_04_03 {
     public static void esccribirDatos(ColeccionPersonas cP) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))) {
             oos.writeObject(cP);
+            //oos.flush()
         } catch (IOException e) {
             Menu.exceptionMessage(e);
         }
