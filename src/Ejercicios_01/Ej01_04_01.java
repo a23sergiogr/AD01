@@ -1,4 +1,4 @@
-package Ejercicios;
+package Ejercicios_01;
 
 //Modifica el programa CopiaArchivos para que copie el archivo otto.txt en un archivo nohaycole.txt
 // en la carpeta src/main/resources de tu proyecto.

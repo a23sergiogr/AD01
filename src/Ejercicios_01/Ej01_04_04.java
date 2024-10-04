@@ -1,9 +1,8 @@
-package Ejercicios;
+package Ejercicios_01;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.io.*;
-import java.net.URLConnection;
 import javax.swing.*;
 
 public class Ej01_04_04 {

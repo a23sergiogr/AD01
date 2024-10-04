@@ -1,6 +1,3 @@
-import resources.ColeccionPersonas;
-import resources.Persona;
-
 import java.io.*;
 
 public class aaPruebas {
@@ -16,3 +13,5 @@ public class aaPruebas {
         }
     }
 }
+
+

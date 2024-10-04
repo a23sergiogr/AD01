@@ -1,6 +1,9 @@
 package Boletin01;
 
+import javax.swing.*;
 import java.io.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  * <h6>Se realice un programa para copiar archivos. El programa debe recoger el
@@ -19,16 +22,101 @@ import java.io.*;
  */
 public class EJ1_Copia_de_Archivos_con_Buffer {
     public static void main(String[] args) {
+        if (urlOrFile()==0)
+            archivoEnDisco();
+        else
+            archivoEnUrl();
+    }
 
-        try(var bis = new BufferedInputStream(new FileInputStream(""));
-            var bos = new BufferedOutputStream(new FileOutputStream(""))){
+    public static void archivoEnDisco() {
+        JFileChooser copy = new JFileChooser("C:\\Users\\a23sergiogr\\Desktop\\AD");
+        copy.showOpenDialog(null);
+        JFileChooser save = new JFileChooser(copy.getSelectedFile());
+        save.showSaveDialog(copy);
 
-            System.out.println("a");
+        try (var bis = new BufferedInputStream(new FileInputStream(copy.getSelectedFile()));
+             var bos = new BufferedOutputStream(new FileOutputStream(save.getSelectedFile()))) {
 
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+
+            bos.write(bis.readAllBytes());
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            exceptionMessage(e, null);
+        } catch (NullPointerException e) {
+            exceptionMessage(e, "Se debe introducir un archivo de origen y destino");
         }
+    }
+
+    public static void archivoEnUrl() {
+
+        URI uri = null;
+        try {
+            uri = new URI(insertarURL());
+        } catch (URISyntaxException e) {
+            exceptionMessage(e, null);
+        }
+
+        JFileChooser save = new JFileChooser("C:\\Users\\a23sergiogr\\Desktop\\AD");
+        save.showSaveDialog(null);
+
+        File saveFile = save.getSelectedFile();
+        if (saveFile.isFile()) {
+            int s = sobreescribir();
+            if (s != 0) {
+                return;
+            }
+        }
+        try (var bis = new BufferedInputStream(uri.toURL().openStream());
+             var bos = new BufferedOutputStream(new FileOutputStream(saveFile))) {
+            bos.write(bis.readAllBytes());
+
+        } catch (IOException e) {
+            exceptionMessage(e, null);
+        } catch (NullPointerException e) {
+            exceptionMessage(e, "Se debe introducir un archivo de origen y destino");
+        }
+    }
+
+    public static String insertarURL() {
+        return JOptionPane.showInputDialog(
+                null,
+                "URI",
+                "Inserta URL Válida",
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
+    public static int urlOrFile() {
+        Object[] o = {"Archivo Local", "URL"};
+        return JOptionPane
+                .showOptionDialog(null,
+                        "Desea copiar un archivo local o de una url",
+                        "Copiar",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        o,
+                        o[0]);
+    }
+
+    public static int sobreescribir() {
+        Object[] o = {"Yes", "No"};
+        return JOptionPane
+                .showOptionDialog(null,
+                        "\nDeseas sobreescribir el archivo?",
+                        "Sobreescribir?",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.WARNING_MESSAGE,
+                        null,
+                        o,
+                        o[0]);
+    }
+
+
+    public static void exceptionMessage(Exception e, String opcMessage) {
+        JOptionPane
+                .showMessageDialog(null,
+                        opcMessage + "\nERROR: " + e,
+                        "Excepción",
+                        JOptionPane.ERROR_MESSAGE);
     }
 }

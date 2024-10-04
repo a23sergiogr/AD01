@@ -1,4 +1,4 @@
-package Ejercicios;
+package Ejercicios_01;
 
 import resources.ColeccionPersonas;
 import resources.Persona;
