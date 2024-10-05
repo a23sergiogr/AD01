@@ -1,4 +1,4 @@
-
+package Ejercicios_01;
 
 //Modifica el programa CopiaArchivos para que copie el archivo otto.txt en un archivo nohaycole.txt
 // en la carpeta src/main/resources de tu proyecto.
@@ -6,7 +6,6 @@
 //Además, haz que el cierre de archivos se realice por medio de try-with-resources.
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
