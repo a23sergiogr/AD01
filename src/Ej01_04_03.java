@@ -13,7 +13,7 @@ public class Ej01_04_03 {
         cargarDatos(cP);
         esccribirDatos(cP);
 
-        int opc = 0;
+        int opc;
         boolean salir = false;
         while (!salir) {
             opc = menu.opcionSelector();
