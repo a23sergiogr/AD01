@@ -1,5 +1,6 @@
 package Boletin01.Ej6_EquipoDeBaloncesto;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public interface Dao <T, K> {

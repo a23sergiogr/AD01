@@ -3,6 +3,7 @@ package Boletin01.Ej6_EquipoDeBaloncesto;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Equipo implements Serializable, Comparable<Equipo> {
     private String nombre;
@@ -13,6 +14,10 @@ public class Equipo implements Serializable, Comparable<Equipo> {
 
     public Equipo(String nombre) {
         this.nombre = nombre;
+        this.victorias = 0;
+        this.derrotas = 0;
+        this.ptnFavor = 0;
+        this.ptnContra = 0;
     }
 
     public Equipo(String nombre, Integer victorias, Integer derrotas, Integer ptnFavor, Integer ptnContra) {
@@ -25,6 +30,22 @@ public class Equipo implements Serializable, Comparable<Equipo> {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public Integer getPtnFavor() {
+        return ptnFavor;
+    }
+
+    public Integer getVictorias() {
+        return victorias;
+    }
+
+    public Integer getDerrotas() {
+        return derrotas;
+    }
+
+    public Integer getPtnContra() {
+        return ptnContra;
     }
 
     /**
@@ -55,14 +76,14 @@ public class Equipo implements Serializable, Comparable<Equipo> {
      */
     @Override
     public int compareTo(@NotNull Equipo eq) {
-        if (this.getPuntos() > eq.getPuntos())
-            return 2;
-        else if (this.getPuntos().equals(eq.getPuntos())) {
+        if (this.getdifPtn() > eq.getdifPtn())
+            return -2;
+        else if (this.getdifPtn().equals(eq.getdifPtn())) {
             if (this.ptnFavor >= eq.ptnFavor)
-                return 1;
+                return -1;
             return 0;
         }
-        return -1;
+        return 1;
     }
 
     /**
@@ -70,7 +91,7 @@ public class Equipo implements Serializable, Comparable<Equipo> {
      */
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(nombre.toLowerCase());
     }
 
     /**
@@ -92,6 +113,7 @@ public class Equipo implements Serializable, Comparable<Equipo> {
                 ", derrotas=" + derrotas +
                 ", ptnFavor=" + ptnFavor +
                 ", ptnContra=" + ptnContra +
+                ", Puntos=" + getdifPtn() +
                 '}';
     }
 }
