@@ -32,16 +32,16 @@ public class Equipo implements Serializable, Comparable<Equipo> {
         return nombre;
     }
 
-    public Integer getPtnFavor() {
-        return ptnFavor;
-    }
-
     public Integer getVictorias() {
         return victorias;
     }
 
     public Integer getDerrotas() {
         return derrotas;
+    }
+
+    public Integer getPtnFavor() {
+        return ptnFavor;
     }
 
     public Integer getPtnContra() {

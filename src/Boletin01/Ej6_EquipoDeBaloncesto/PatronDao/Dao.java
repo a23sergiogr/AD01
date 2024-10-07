@@ -1,6 +1,5 @@
-package Boletin01.Ej6_EquipoDeBaloncesto;
+package Boletin01.Ej6_EquipoDeBaloncesto.PatronDao;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public interface Dao <T, K> {
@@ -8,7 +7,7 @@ public interface Dao <T, K> {
     Set<T> getAll();
     boolean save(T obxeto);
     boolean delete(T obxeto);
-    boolean deleteAll();
     boolean deleteById(K id);
+    boolean deleteAll();
     void update(T obxeto);
 }

@@ -1,14 +1,21 @@
-package Boletin01.Ej6_EquipoDeBaloncesto;
+package Boletin01.Ej6_EquipoDeBaloncesto.PatronDao;
+
+import Boletin01.Ej6_EquipoDeBaloncesto.Equipo;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class EquipoObjectStreamDao implements Dao<Equipo, String> {
-    private static final String RUTA = "src/Boletin01/Ej6_EquipoDeBaloncesto/Datos/Equipos.dat";
+    private static final String RUTA = "src/Boletin01/Ej6_EquipoDeBaloncesto/Datos/ObjectStreamEquipos.dat";
+    private static final Path datos = Paths.get(RUTA);
+
 
     /**
-     * @param id
-     * @return
+     * @param id Nombre del Equipo a recuperar
+     * @return  Equipo
      */
     @Override
     public Equipo get(String id) {
@@ -22,7 +29,7 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
     }
 
     /**
-     * @return
+     * @return Set de Equipos
      */
     @Override
     public Set<Equipo> getAll() {
@@ -43,53 +50,63 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
         } catch (ClassNotFoundException e) {
             System.err.println("ClassNotFoundException in getAll()");
         }
-        TreeSet sortedSet = sortSet(set);
+        TreeSet<Equipo> sortedSet = sortSet(set);
         saveAll(sortedSet);
         return sortedSet;
     }
 
     /**
-     * @param obxeto
+     * @param obxeto Equipo a gardar
+     * @return True si o garda, false si no
      */
     @Override
     public boolean save(Equipo obxeto) {
-        HashSet<Equipo> set = new HashSet<>(getAll());
-        if (!set.contains(obxeto))
-            System.out.println(set.add(obxeto));
-        saveAll(sortSet(set));
+        boolean append = Files.exists(datos);
+        try (FileOutputStream fos = new FileOutputStream(datos.toFile(), append);
+             ObjectOutputStream oos = append ? new EquipoOutputStream(fos) : new ObjectOutputStream(fos)) {
+            oos.writeObject(obxeto);
+        } catch (IOException e) {
+            System.out.println("Erro de Entrada/Saída");
+            return false;
+        }
         return true;
     }
 
     /**
-     * @param obxeto
+     * @param obxeto Equipo a eliminar
+     * @return True si o borra, false si no
      */
     @Override
     public boolean delete(Equipo obxeto) {
         HashSet<Equipo> set = new HashSet<>(getAll());
-        set.remove(obxeto);
-        saveAll(sortSet(set));
-        return true;
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public boolean deleteAll() {
+        if (set.remove(obxeto))
+            return saveAll(sortSet(set));
         return false;
     }
 
     /**
-     * @param id
-     * @return
+     * @param id Nome do equipo a borrar
+     * @return True si o borra, false si no
      */
     @Override
     public boolean deleteById(String id) {
+        HashSet<Equipo> set = new HashSet<>(getAll());
+        if (set.remove(new Equipo(id)))
+            return saveAll(sortSet(set));
         return false;
     }
 
     /**
-     * @param obxeto
+     * @return True si borra toda a colección, false si no
+     */
+    @Override
+    public boolean deleteAll() {
+        HashSet<Equipo> set = new HashSet<>();
+        return saveAll(sortSet(set));
+    }
+
+    /**
+     * @param obxeto Equipo a actualizar
      */
     @Override
     public void update(Equipo obxeto) {
@@ -99,7 +116,7 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
         saveAll(sortSet(set));
     }
 
-    private void saveAll(TreeSet set) {
+    private boolean saveAll(TreeSet<Equipo> set) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(RUTA))) {
             set.forEach(e -> {
                 try {
@@ -112,9 +129,10 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
         } catch (IOException e) {
             System.err.println("IOException in saveAll()");
         }
+        return true;
     }
 
-    private TreeSet sortSet(Set set){
-        return new TreeSet<Equipo>(set);
+    private TreeSet<Equipo> sortSet(Set<Equipo> set){
+        return new TreeSet<>(set);
     }
 }

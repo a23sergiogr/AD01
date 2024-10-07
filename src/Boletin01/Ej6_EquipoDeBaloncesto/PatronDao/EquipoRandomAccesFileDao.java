@@ -1,9 +1,22 @@
-package Boletin01.Ej6_EquipoDeBaloncesto;
+package Boletin01.Ej6_EquipoDeBaloncesto.PatronDao;
 
+import Boletin01.Ej6_EquipoDeBaloncesto.Equipo;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Set;
 
 public class EquipoRandomAccesFileDao implements Dao<Equipo, String>{
     private static final String RUTA = "src/Boletin01/Ej6_EquipoDeBaloncesto/Datos/EquiposRAF.dat";
+    private static final Path datos = Paths.get(RUTA);
+
+
+    public EquipoRandomAccesFileDao() throws IOException {
+        if (!Files.exists(datos))
+            Files.createFile(datos);
+    }
 
     /**
      * @param id
