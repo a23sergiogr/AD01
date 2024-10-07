@@ -6,7 +6,9 @@ import java.util.Set;
 public interface Dao <T, K> {
     T get(K id);
     Set<T> getAll();
-    void save(T obxeto);
-    void delete(T obxeto);
+    boolean save(T obxeto);
+    boolean delete(T obxeto);
+    boolean deleteAll();
+    boolean deleteById(K id);
     void update(T obxeto);
 }

@@ -52,21 +52,40 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
      * @param obxeto
      */
     @Override
-    public void save(Equipo obxeto) {
+    public boolean save(Equipo obxeto) {
         HashSet<Equipo> set = new HashSet<>(getAll());
         if (!set.contains(obxeto))
             System.out.println(set.add(obxeto));
         saveAll(sortSet(set));
+        return true;
     }
 
     /**
      * @param obxeto
      */
     @Override
-    public void delete(Equipo obxeto) {
+    public boolean delete(Equipo obxeto) {
         HashSet<Equipo> set = new HashSet<>(getAll());
         set.remove(obxeto);
         saveAll(sortSet(set));
+        return true;
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public boolean deleteAll() {
+        return false;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteById(String id) {
+        return false;
     }
 
     /**

@@ -40,7 +40,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
      * @param obxeto
      */
     @Override
-    public void save(Equipo obxeto) {
+    public boolean save(Equipo obxeto) {
         TreeSet<Equipo> set = new TreeSet<>(getAll());
         set.add(obxeto);
         try (var bos = new BufferedOutputStream(new FileOutputStream(RUTA))) {
@@ -56,14 +56,32 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
         } catch (IOException e) {
             System.err.println("IOException in save()");
         }
+        return true;
     }
 
     /**
      * @param obxeto
      */
     @Override
-    public void delete(Equipo obxeto) {
+    public boolean delete(Equipo obxeto) {
+        return false;
+    }
 
+    /**
+     * @return
+     */
+    @Override
+    public boolean deleteAll() {
+        return false;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteById(String id) {
+        return false;
     }
 
     /**

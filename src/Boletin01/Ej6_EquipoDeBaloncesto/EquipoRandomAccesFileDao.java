@@ -26,16 +26,33 @@ public class EquipoRandomAccesFileDao implements Dao<Equipo, String>{
      * @param obxeto
      */
     @Override
-    public void save(Equipo obxeto) {
-
+    public boolean save(Equipo obxeto) {
+        return false;
     }
 
     /**
      * @param obxeto
      */
     @Override
-    public void delete(Equipo obxeto) {
+    public boolean delete(Equipo obxeto) {
+        return false;
+    }
 
+    /**
+     * @return
+     */
+    @Override
+    public boolean deleteAll() {
+        return false;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteById(String id) {
+        return false;
     }
 
     /**
