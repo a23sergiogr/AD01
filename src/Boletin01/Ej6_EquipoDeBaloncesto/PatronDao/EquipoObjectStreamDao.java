@@ -9,9 +9,14 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class EquipoObjectStreamDao implements Dao<Equipo, String> {
-    private static final String RUTA = "src/Boletin01/Ej6_EquipoDeBaloncesto/Datos/ObjectStreamEquipos.dat";
-    private static final Path datos = Paths.get(RUTA);
+    private final String ruta;
+    private final Path datos;
 
+
+    public EquipoObjectStreamDao(String ruta){
+        datos = Paths.get(ruta);
+        this.ruta = ruta;
+    }
 
     /**
      * @param id Nombre del Equipo a recuperar
@@ -34,7 +39,7 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
     @Override
     public Set<Equipo> getAll() {
         HashSet<Equipo> set = new HashSet<>();
-        try (var ois = new ObjectInputStream(new FileInputStream(RUTA))) {
+        try (var ois = new ObjectInputStream(new FileInputStream(ruta))) {
             while (true) {
                 try {
                     Equipo equipo = (Equipo) ois.readObject();
@@ -117,7 +122,7 @@ public class EquipoObjectStreamDao implements Dao<Equipo, String> {
     }
 
     private boolean saveAll(TreeSet<Equipo> set) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(RUTA))) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ruta))) {
             set.forEach(e -> {
                 try {
                     oos.writeObject(e);

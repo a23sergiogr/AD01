@@ -12,11 +12,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class EquipoFileBufferedStream implements Dao<Equipo, String> {
-    private static final String RUTA = "src/Boletin01/Ej6_EquipoDeBaloncesto/Datos/FileBufferedEquipos.dat";
-    private static final Path datos = Paths.get(RUTA);
+    private final String ruta;
+    private final Path datos;
 
 
-    public EquipoFileBufferedStream() throws IOException {
+    public EquipoFileBufferedStream(String ruta) throws IOException {
+        datos = Paths.get(ruta);
+        this.ruta = ruta;
         if (!Files.exists(datos))
             Files.createFile(datos);
     }
@@ -29,7 +31,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
     @Override
     public Set<Equipo> getAll() {
         HashSet<Equipo> set = null;
-        try (var bis = new BufferedInputStream(new FileInputStream(RUTA))) {
+        try (var bis = new BufferedInputStream(new FileInputStream(ruta))) {
             byte[] byteArray = bis.readAllBytes();
             set = deSerializador(byteArray);
         } catch (FileNotFoundException e) {
@@ -46,7 +48,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
         String str = getString();
         assert str != null;
         if (!str.contains(obxeto.getNombre())){
-            try (var bos = new BufferedOutputStream(new FileOutputStream(RUTA, Files.exists(datos)))) {
+            try (var bos = new BufferedOutputStream(new FileOutputStream(ruta, Files.exists(datos)))) {
                 bos.write(serializador(obxeto));
                 return true;
             } catch (FileNotFoundException e) {
@@ -63,7 +65,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
         HashSet<Equipo> set = new HashSet<>(getAll());
 
         if (set.remove(obxeto)) {
-            try (var bos = new BufferedOutputStream(new FileOutputStream(RUTA))) {
+            try (var bos = new BufferedOutputStream(new FileOutputStream(ruta))) {
                 for (Equipo equipo : set) {
                     bos.write(serializador(equipo));
                 }
@@ -83,7 +85,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
         HashSet<Equipo> set = new HashSet<>(getAll());
 
         if (set.remove(new Equipo(id))) {
-            try (var bos = new BufferedOutputStream(new FileOutputStream(RUTA))) {
+            try (var bos = new BufferedOutputStream(new FileOutputStream(ruta))) {
                 for (Equipo equipo : set) {
                     bos.write(serializador(equipo));
                 }
@@ -100,7 +102,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
 
     @Override
     public boolean deleteAll() {
-        try (var bos = new BufferedOutputStream(new FileOutputStream(RUTA))) {
+        try (var bos = new BufferedOutputStream(new FileOutputStream(ruta))) {
             return true;
         } catch (FileNotFoundException e) {
             System.err.println("FileNotFoundException in delete()");
@@ -152,7 +154,7 @@ public class EquipoFileBufferedStream implements Dao<Equipo, String> {
     }
 
     private String getString(){
-        try (var bis = new BufferedInputStream(new FileInputStream(RUTA))) {
+        try (var bis = new BufferedInputStream(new FileInputStream(ruta))) {
             byte[] byteArray = bis.readAllBytes();
 
             char[] charArray = new char[byteArray.length];
